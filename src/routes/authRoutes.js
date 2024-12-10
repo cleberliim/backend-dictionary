@@ -1,7 +1,11 @@
 const express = require("express");
-const { signup } = require("../controllers/authController");
+const authController = require("../controllers/authController");
 const router = express.Router();
 
-router.post("/signup", signup);
+// Rota para registro de novos usuários
+router.post("/signup", authController.register);
+
+// Rota para login de usuários
+router.post("/signin", authController.login);
 
 module.exports = router;
