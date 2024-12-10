@@ -1,0 +1,12 @@
+{
+  "name": "backend-dictionary",
+  "version": "1.0.0",
+  "description": "Este é um teste para que possamos ver as suas habilidades como Back-end Developer.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
