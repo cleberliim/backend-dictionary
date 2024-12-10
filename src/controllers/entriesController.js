@@ -1,47 +1,44 @@
-const { Word, History } = require("../models");
+const wordsApiService = require("../services/wordsApiService");
 const cacheService = require("../services/cacheService");
+const Word = require("../models/Word");
+const History = require("../models/History");
 
-const getAllWords = async (req, res) => {
-  try {
-    const cache = await cacheService.getCache("words");
-    if (cache) {
-      return res.status(200).json(JSON.parse(cache));
+const entriesController = {
+  async getWordDetails(req, res) {
+    const { word } = req.params;
+
+    try {
+      // Tentativa de pegar do cache
+      const cachedData = await cacheService.getFromCache(word);
+      if (cachedData) {
+        return res.json(cachedData);
+      }
+
+      // Caso não tenha no cache, busca na API externa
+      const wordDetails = await wordsApiService.getWordDetails(word);
+
+      // Salva no cache
+      await cacheService.saveToCache(word, wordDetails);
+
+      // Cria um registro de histórico
+      await History.create({ word });
+
+      return res.json(wordDetails);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Erro ao obter detalhes da palavra" });
     }
+  },
 
-    const words = await Word.findAll();
-    await cacheService.setCache("words", JSON.stringify(words), 3600);
-
-    return res.status(200).json(words);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Erro ao buscar palavras" });
-  }
+  async getHistory(req, res) {
+    try {
+      const history = await History.findAll();
+      return res.json(history);
+    } catch (error) {
+      return res.status(500).json({ message: "Erro ao obter histórico" });
+    }
+  },
 };
 
-const getWordHistory = async (req, res) => {
-  const { userId } = req.params;
-  try {
-    const history = await History.findAll({ where: { userId } });
-
-    return res.status(200).json(history);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Erro ao buscar histórico" });
-  }
-};
-
-const addWordToHistory = async (req, res) => {
-  const { userId, wordId } = req.body;
-  try {
-    const history = await History.create({ userId, wordId });
-
-    return res.status(201).json(history);
-  } catch (error) {
-    console.error(error);
-    return res
-      .status(500)
-      .json({ message: "Erro ao adicionar palavra ao histórico" });
-  }
-};
-
-module.exports = { getAllWords, getWordHistory, addWordToHistory };
+module.exports = entriesController;

@@ -1,54 +1,40 @@
-const { User, Favorite } = require("../models");
+const User = require("../models/User");
+const Favorite = require("../models/Favorite");
 
-const getUserProfile = async (req, res) => {
-  const { userId } = req.params;
-  try {
-    const user = await User.findByPk(userId, {
-      attributes: ["id", "email", "createdAt", "updatedAt"],
-    });
-
-    if (!user) {
-      return res.status(404).json({ message: "Usuário não encontrado" });
+const userController = {
+  async getProfile(req, res) {
+    try {
+      const user = await User.findByPk(req.user.id);
+      return res.json(user);
+    } catch (error) {
+      return res.status(500).json({ message: "Erro ao obter perfil" });
     }
+  },
 
-    return res.status(200).json(user);
-  } catch (error) {
-    console.error(error);
-    return res
-      .status(500)
-      .json({ message: "Erro ao buscar perfil do usuário" });
-  }
-};
+  async addFavorite(req, res) {
+    const { word } = req.body;
 
-const addFavorite = async (req, res) => {
-  const { userId, wordId } = req.body;
-  try {
-    const favorite = await Favorite.create({ userId, wordId });
-
-    return res.status(201).json(favorite);
-  } catch (error) {
-    console.error(error);
-    return res
-      .status(500)
-      .json({ message: "Erro ao adicionar palavra aos favoritos" });
-  }
-};
-
-const removeFavorite = async (req, res) => {
-  const { userId, wordId } = req.params;
-  try {
-    const favorite = await Favorite.findOne({ where: { userId, wordId } });
-    if (!favorite) {
-      return res.status(404).json({ message: "Favorito não encontrado" });
+    try {
+      const favorite = await Favorite.create({
+        userId: req.user.id,
+        word,
+      });
+      return res.status(201).json(favorite);
+    } catch (error) {
+      return res.status(500).json({ message: "Erro ao adicionar favorito" });
     }
+  },
 
-    await favorite.destroy();
-
-    return res.status(200).json({ message: "Favorito removido com sucesso" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Erro ao remover favorito" });
-  }
+  async getFavorites(req, res) {
+    try {
+      const favorites = await Favorite.findAll({
+        where: { userId: req.user.id },
+      });
+      return res.json(favorites);
+    } catch (error) {
+      return res.status(500).json({ message: "Erro ao obter favoritos" });
+    }
+  },
 };
 
-module.exports = { getUserProfile, addFavorite, removeFavorite };
+module.exports = userController;
