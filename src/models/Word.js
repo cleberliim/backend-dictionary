@@ -1,34 +1,14 @@
-const { Sequelize, DataTypes } = require("sequelize");
-const sequelize = require("../config/mysql"); // Importando a instância do Sequelize
+const connection = require("../config/database");
 
-const Word = sequelize.define(
-  "Word",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    word: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: Sequelize.NOW,
-      allowNull: false,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      defaultValue: Sequelize.NOW,
-      allowNull: false,
-    },
+const Word = {
+  findAll: (search, limit, offset, callback) => {
+    let query = "SELECT * FROM words WHERE word LIKE ? LIMIT ? OFFSET ?";
+    connection.query(query, [`%${search}%`, limit, offset], callback);
   },
-  {
-    tableName: "words", // Nome da tabela no banco
-    timestamps: true, // Adiciona as colunas createdAt e updatedAt automaticamente
-  }
-);
+  findByName: (name, callback) => {
+    let query = "SELECT * FROM words WHERE word = ?";
+    connection.query(query, [name], callback);
+  },
+};
 
 module.exports = Word;

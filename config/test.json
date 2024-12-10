@@ -1,0 +1,13 @@
+{
+  "db": {
+    "host": "localhost",
+    "user": "root",
+    "password": "",
+    "database": "dictionary"
+    
+  },
+
+  "server": {
+    "port": 3001
+  }
+}

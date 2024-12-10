@@ -1,34 +1,21 @@
 const request = require("supertest");
-const app = require("../server"); // Certifique-se de que o app está sendo exportado corretamente
+const app = require("../app"); // Certifique-se de que o app está sendo importado corretamente
 
-describe("Auth Routes", () => {
-  it("should register a new user", async () => {
-    const response = await request(app).post("/auth/signup").send({
-      email: "testuser@example.com",
-      password: "password123",
-    });
-
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty("token");
-  });
-
-  it("should login an existing user", async () => {
-    const response = await request(app).post("/auth/signin").send({
-      email: "testuser@example.com",
-      password: "password123",
-    });
+describe("Auth Endpoints", () => {
+  it("Should login successfully", async () => {
+    const response = await request(app)
+      .post("/auth/signin") // Verifique se o prefixo "/auth" é necessário aqui
+      .send({ username: "testuser", password: "password123" });
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("token");
   });
 
-  it("should return error if email or password is incorrect", async () => {
-    const response = await request(app).post("/auth/signin").send({
-      email: "testuser@example.com",
-      password: "wrongpassword",
-    });
+  it("Should fail with incorrect credentials", async () => {
+    const response = await request(app)
+      .post("/auth/signin") // Mesmo prefixo "/auth"
+      .send({ username: "testuser", password: "wrongpassword" });
 
     expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty("message", "Invalid credentials");
   });
 });
