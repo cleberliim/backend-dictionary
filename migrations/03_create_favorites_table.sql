@@ -1,0 +1,9 @@
+CREATE TABLE favorites (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  wordId INT NOT NULL,
+  userId INT NOT NULL,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (wordId) REFERENCES words(id) ON DELETE CASCADE, -- Relacionamento com a tabela words
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE  -- Relacionamento com a tabela users
+);
