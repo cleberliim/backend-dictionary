@@ -1,22 +1,42 @@
-const connection = require("../config/database");
+const db = require("../config/db");
+const bcrypt = require("bcryptjs");
 
-const User = {
-  create: (name, email, password, callback) => {
-    let query = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-    connection.query(query, [name, email, password], callback);
-  },
-  findByEmail: (email, callback) => {
-    let query = "SELECT * FROM users WHERE email = ?";
-    connection.query(query, [email], callback);
-  },
-  findHistory: (userId, callback) => {
-    let query = "SELECT * FROM history WHERE user_id = ?";
-    connection.query(query, [userId], callback);
-  },
-  findFavorites: (userId, callback) => {
-    let query = "SELECT * FROM favorites WHERE user_id = ?";
-    connection.query(query, [userId], callback);
-  },
-};
+class User {
+  static create(name, email, password) {
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    return new Promise((resolve, reject) => {
+      db.query(
+        "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+        [name, email, hashedPassword],
+        (err, results) => {
+          if (err) return reject(err);
+          resolve(results);
+        }
+      );
+    });
+  }
+
+  static findByEmail(email) {
+    return new Promise((resolve, reject) => {
+      db.query(
+        "SELECT * FROM users WHERE email = ?",
+        [email],
+        (err, results) => {
+          if (err) return reject(err);
+          resolve(results[0]);
+        }
+      );
+    });
+  }
+
+  static findById(id) {
+    return new Promise((resolve, reject) => {
+      db.query("SELECT * FROM users WHERE id = ?", [id], (err, results) => {
+        if (err) return reject(err);
+        resolve(results[0]);
+      });
+    });
+  }
+}
 
 module.exports = User;

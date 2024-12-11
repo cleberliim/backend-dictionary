@@ -1,18 +1,35 @@
-const app = require("./app");
-const config = require("config");
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-const port = process.env.PORT || config.get("server.port"); // Usa a variável de ambiente PORT, se definida
-
-const server = app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+// Middleware para logar a requisição
+app.use((req, res, next) => {
+  console.log(`Requisição recebida: ${req.method} ${req.url}`);
+  next();
 });
 
-// Exemplo no arquivo de rotas
-app.get("/dictionary/test", (req, res) => {
-  res.status(200).json({
-    word: "test",
-    definition: "A test definition",
-  });
+// Middleware para parsear o corpo das requisições JSON
+app.use(express.json());
+
+// Rota simples para verificar se o servidor responde corretamente
+app.get("/", (req, res) => {
+  res.json({ message: "Servidor funcionando!" });
 });
 
-module.exports = server;
+// Caso você tenha outras rotas, adicione-as aqui
+// require("./app")(app);
+
+// Middleware para lidar com erros
+app.use((err, req, res, next) => {
+  if (!res.headersSent) {
+    console.error("Erro ocorrido:", err);
+    res.status(500).json({ error: "Erro no servidor" });
+  } else {
+    next(err);
+  }
+});
+
+// Inicia o servidor na porta configurada
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});

@@ -1,20 +1,24 @@
 const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
 const cors = require("cors");
+const app = express();
 
-// Middlewares
+// Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-// Importando as rotas
-const authRoutes = require("./routes/auth");
-const dictionaryRoutes = require("./routes/dictionary");
-const userRoutes = require("./routes/user");
+// Importando rotas
+const authRoutes = require("./routes/authRoutes");
+const dictionaryRoutes = require("./routes/dictionaryRoutes");
+const userRoutes = require("./routes/userRoutes");
 
-// Definindo as rotas
-app.use("/auth", authRoutes);
-app.use("/dictionary", dictionaryRoutes);
-app.use("/user", userRoutes);
+// Importando o middleware de autenticação
+const authMiddleware = require("./middlewares/authMiddleware");
+
+// Usando as rotas com os prefixos apropriados
+app.use("/api/auth", authRoutes); // Rotas de autenticação  
+
+// Rotas protegidas por autenticação
+app.use("/api/dictionary", authMiddleware, dictionaryRoutes);
+app.use("/api/users", authMiddleware, userRoutes);
 
 module.exports = app;
