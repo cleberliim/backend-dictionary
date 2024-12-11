@@ -14,10 +14,10 @@ const userRoutes = require("./routes/userRoutes");
 // Importando o middleware de autenticação
 const authMiddleware = require("./middlewares/authMiddleware");
 
-// Usando as rotas com os prefixos apropriados
-app.use("/api/auth", authRoutes); // Rotas de autenticação  
+// Rota de autenticação não deve passar pelo middleware
+app.use("/api/auth", authRoutes); // Não use o middleware aqui
 
-// Rotas protegidas por autenticação
+// Rotas protegidas por autenticação (não aplicável para login/signup)
 app.use("/api/dictionary", authMiddleware, dictionaryRoutes);
 app.use("/api/users", authMiddleware, userRoutes);
 
