@@ -12,7 +12,6 @@ Uma API desenvolvida em Node.js que permite o gerenciamento de palavras, com fun
 - **Autenticação**: JWT (JSON Web Tokens)
 - **Cache**: MongoDB com TTL (Time to Live)
 - **Swagger**: Documentação interativa de API
- 
 
 ### Principais Dependências:
 
@@ -71,7 +70,7 @@ Uma API desenvolvida em Node.js que permite o gerenciamento de palavras, com fun
    - Abra o terminal e execute:
      ```bash
      git clone https://github.com/cleberliim/backend-dictionary
-     cd nome-do-repositorio
+     cd backend-dictionary
      ```
 
 5. **Instalar as Dependências**
@@ -147,24 +146,6 @@ O projeto já inclui um arquivo `.gitignore` básico que ignora arquivos como:
 - `node_modules/`
 - `.env`
 - `logs/`
-
-## Estrutura de Arquivos
-
-```
-/
-├── models/
-│   ├── Word.js       # Modelo para palavras
-│   ├── Cache.js      # Modelo para cache
-├── routes/
-│   ├── entries.js    # Rotas de palavras
-├── controllers/
-│   ├── entriesController.js # Lógica das rotas de palavras
-├── middleware/
-│   ├── auth.js       # Middleware de autenticação JWT
-├── app.js            # Configuração principal do servidor
-├── swagger.json      # Configuração do Swagger
-└── .env              # Configuração das variáveis de ambiente
-```
 
 ## Finalização
 
