@@ -1,3 +1,5 @@
 package-lock.json
 node_modules
 Procfile
+# Local Netlify folder
+.netlify
