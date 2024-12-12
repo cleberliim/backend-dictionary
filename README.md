@@ -12,7 +12,7 @@ Uma API desenvolvida em Node.js que permite o gerenciamento de palavras, com fun
 - **Autenticação**: JWT (JSON Web Tokens)
 - **Cache**: MongoDB com TTL (Time to Live)
 - **Swagger**: Documentação interativa de API
-- **Heroku**: Deploy
+ 
 
 ### Principais Dependências:
 
