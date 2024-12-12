@@ -1,0 +1,269 @@
+openapi: 3.0.0
+info:
+  title: API de Palavras e Histórico de Usuário
+  description: API para gerenciar palavras, histórico, favoritos e palavras em inglês.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Servidor local de desenvolvimento
+
+paths:
+  /auth/login:
+    post:
+      summary: Realiza o login e retorna um token JWT
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "user123"
+                password:
+                  type: string
+                  example: "senha123"
+      responses:
+        "200":
+          description: Login bem-sucedido com retorno de token JWT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        "400":
+          description: Requisição inválida (credenciais incorretas)
+
+  /user/me:
+    get:
+      summary: Obtém as informações do usuário autenticado
+      operationId: getUserInfo
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Informações do usuário retornadas com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "60d21b4f8f4e3e30f4f0c2f1"
+                  username:
+                    type: string
+                    example: "user123"
+                  email:
+                    type: string
+                    example: "user123@email.com"
+        "401":
+          description: Não autorizado. Token inválido ou ausente.
+
+  /user/update:
+    put:
+      summary: Atualiza as informações do usuário autenticado
+      operationId: updateUser
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "user1234"
+                password:
+                  type: string
+                  example: "novaSenha123"
+      responses:
+        "200":
+          description: Usuário atualizado com sucesso
+        "400":
+          description: Dados de requisição inválidos
+        "401":
+          description: Não autorizado. Token inválido ou ausente.
+
+  /entries/en:
+    get:
+      summary: Busca palavras com suporte a busca e paginação
+      operationId: searchWords
+      parameters:
+        - name: page
+          in: query
+          description: Página para paginar os resultados
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Limite de resultados por página
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: Lista de palavras retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: "palavra1"
+        "400":
+          description: Parâmetros de busca inválidos
+
+  /entries/en/{word}:
+    get:
+      summary: Obtém uma palavra específica
+      operationId: getWord
+      parameters:
+        - name: word
+          in: path
+          required: true
+          description: Palavra a ser consultada
+          schema:
+            type: string
+            example: "example"
+      responses:
+        "200":
+          description: Palavra retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  word:
+                    type: string
+                    example: "example"
+                  definition:
+                    type: string
+                    example: "Exemplo de definição da palavra."
+        "404":
+          description: Palavra não encontrada
+
+  /entries/history/add:
+    post:
+      summary: Adiciona uma palavra ao histórico do usuário
+      operationId: addWordToHistory
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  type: string
+                  example: "example"
+      responses:
+        "201":
+          description: Palavra adicionada ao histórico com sucesso
+        "400":
+          description: Palavra já existe no histórico
+        "401":
+          description: Não autorizado. Token inválido ou ausente.
+
+  /entries/history:
+    get:
+      summary: Obtém o histórico de palavras do usuário
+      operationId: getHistory
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Histórico de palavras retornado com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: "example"
+        "401":
+          description: Não autorizado. Token inválido ou ausente.
+
+  /entries/favorites/add:
+    post:
+      summary: Adiciona uma palavra aos favoritos do usuário
+      operationId: addWordToFavorites
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  type: string
+                  example: "example"
+      responses:
+        "201":
+          description: Palavra adicionada aos favoritos com sucesso
+        "400":
+          description: Palavra já está nos favoritos
+        "401":
+          description: Não autorizado. Token inválido ou ausente.
+
+  /entries/favorites:
+    get:
+      summary: Obtém as palavras favoritas do usuário
+      operationId: getFavorites
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Palavras favoritas retornadas com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: "example"
+        "401":
+          description: Não autorizado. Token inválido ou ausente.
+
+  /entries/en/{word}/unfavorite:
+    delete:
+      summary: Remove uma palavra dos favoritos do usuário
+      operationId: removeWordFromFavorites
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: word
+          in: path
+          required: true
+          description: Palavra a ser removida dos favoritos
+          schema:
+            type: string
+            example: "example"
+      responses:
+        "200":
+          description: Palavra removida dos favoritos com sucesso
+        "404":
+          description: Palavra não encontrada nos favoritos
+        "401":
+          description: Não autorizado. Token inválido ou ausente.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
