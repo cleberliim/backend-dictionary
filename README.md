@@ -1,7 +1,5 @@
 # Dictionary API
 
-This is a challenge by Coodesh
-
 ## Descrição
 
 Uma API desenvolvida em Node.js que permite o gerenciamento de palavras, com funcionalidades de autenticação via JWT, persistência de dados no MongoDB e caching para otimizar buscas. O sistema possibilita que os usuários busquem palavras, armazenem favoritos, visualizem históricos e obtenham respostas rápidas através de uma implementação de cache no MongoDB.
@@ -14,7 +12,7 @@ Uma API desenvolvida em Node.js que permite o gerenciamento de palavras, com fun
 - **Autenticação**: JWT (JSON Web Tokens)
 - **Cache**: MongoDB com TTL (Time to Live)
 - **Swagger**: Documentação interativa de API
-- **Heroku**: Deploy
+ 
 
 ### Principais Dependências:
 
