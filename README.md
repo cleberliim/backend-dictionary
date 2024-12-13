@@ -81,11 +81,48 @@ Uma API desenvolvida em Node.js que permite o gerenciamento de palavras, com fun
      ```
 
 6. **Rodar o Projeto**
+
    - Para iniciar o servidor, execute:
      ```bash
      npm start
      ```
    - O servidor estará rodando na porta `3000` por padrão.
+
+7. **Estrutura de pastas e arquivos**
+
+```bash
+  project/
+├── src/
+│   ├── auth/                  # Módulo de autenticação
+│   │   ├── authController.js
+│   │   ├── authService.js
+│   │   └── authRoutes.js
+│   │
+│   ├── user/                  # Módulo de usuário
+│   │   ├── userController.js
+│   │   ├── userService.js
+│   │   └── userRoutes.js
+│   │
+│   ├── product/               # Módulo de produto
+│   │   ├── productController.js
+│   │   ├── productService.js
+│   │   └── productRoutes.js
+│   │
+│   ├── utils/                 # Módulo de utilidades (funções auxiliares)
+│   │   ├── logger.js
+│   │   └── validator.js
+│   │
+│   └── config/                # Configurações globais
+│       ├── db.js
+│       └── server.js
+│
+├── tests/
+│   ├── auth.test.js
+│   ├── user.test.js
+│   └── product.test.js
+│
+└── package.json
+```
 
 ### Documentação com Swagger
 
