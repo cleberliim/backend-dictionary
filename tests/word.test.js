@@ -9,10 +9,13 @@ describe('Word Routes', () => {
     const res = await request(app)
       .post('/api/auth/login')
       .send({
-        username: 'testuser',
-        password: 'password123',
+        username: 'cleberlima',
+        password: '123',
       });
+
+    // Verifique se o token foi retornado corretamente
     token = res.body.token;
+    expect(token).toBeDefined(); // Garantir que o token foi recebido
   });
 
   it('Deve buscar palavras', async () => {
@@ -21,7 +24,8 @@ describe('Word Routes', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('words');
+    expect(res.body).toHaveProperty('words'); // Verifique se a propriedade 'words' existe na resposta
+    expect(Array.isArray(res.body.words)).toBe(true); // Verifique se 'words' é um array
   });
 
   it('Deve adicionar palavra ao histórico', async () => {
@@ -31,15 +35,17 @@ describe('Word Routes', () => {
       .send({ word: 'apple' });
 
     expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('message', 'Palavra adicionada ao histórico');
   });
 
   it('Deve adicionar palavra aos favoritos', async () => {
     const res = await request(app)
       .post('/api/entries/favorites/add')
       .set('Authorization', `Bearer ${token}`)
-      .send({ word: 'banana' });
+      .send({ word: 'gelo' });
 
     expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('message', 'Palavra adicionada aos favoritos');
   });
 
   it('Deve remover palavra dos favoritos', async () => {
@@ -48,5 +54,6 @@ describe('Word Routes', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('message', 'Palavra removida dos favoritos');
   });
 });

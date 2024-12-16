@@ -15,7 +15,7 @@ const PORT = 3000;
 connectDB();
 
 // Middleware
-app.use(bodyParser.json()); // Middleware para parsear o corpo da requisição
+app.use(bodyParser.json());
 
 // Carregar a documentação Swagger
 const swaggerDocument = YAML.load(path.join(__dirname, "swagger.yaml"));
@@ -24,10 +24,9 @@ const swaggerDocument = YAML.load(path.join(__dirname, "swagger.yaml"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Definir rotas
-
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/entries", wordRoutes); // Aqui você define a rota base para palavras, por exemplo
+app.use("/api/entries", wordRoutes);
 
 // Rota principal
 app.get("/api/", (req, res) => {
@@ -36,7 +35,12 @@ app.get("/api/", (req, res) => {
   });
 });
 
-// Inicializar o servidor
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+// Inicializar o servidor apenas se não estiver em modo de teste
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+  });
+}
+
+// Exportar o aplicativo para os testes
+module.exports = app;

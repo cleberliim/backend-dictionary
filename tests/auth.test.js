@@ -1,13 +1,14 @@
 const request = require('supertest');
-const app = require('../index'); // Ajuste para o caminho correto do seu app
+const app = require('../index'); // Ajuste para o caminho correto do seu app 
+
 
 describe('Auth Routes', () => {
   it('Deve registrar um novo usuário', async () => {
     const res = await request(app)
       .post('/api/auth/register')
       .send({
-        username: 'testuser',
-        password: 'password123',
+        username: 'cleberlima',
+        password: '123',
       });
 
     expect(res.status).toBe(201);
@@ -18,8 +19,8 @@ describe('Auth Routes', () => {
     const res = await request(app)
       .post('/api/auth/login')
       .send({
-        username: 'testuser',
-        password: 'password123',
+        username: 'cleberlima',
+        password: '123',
       });
 
     expect(res.status).toBe(200);
@@ -30,8 +31,8 @@ describe('Auth Routes', () => {
     const res = await request(app)
       .post('/api/auth/login')
       .send({
-        username: 'wronguser',
-        password: 'wrongpassword',
+        username: 'cleberlima',
+        password: '12322',
       });
 
     expect(res.status).toBe(401);

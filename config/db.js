@@ -2,10 +2,8 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://localhost:27017/dictionary-api', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    // Conectar sem as opções deprecated
+    await mongoose.connect('mongodb://localhost:27017/dictionary-api');
     console.log('Conectado ao MongoDB');
   } catch (err) {
     console.error('Erro na conexão com o MongoDB', err);
