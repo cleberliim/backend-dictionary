@@ -1,5 +1,7 @@
 # Dictionary API
 
+This is a challenge by [Coodesh](https://coodesh.com/)
+
 ## Descrição
 
 Uma API desenvolvida em Node.js que permite o gerenciamento de palavras, com funcionalidades de autenticação via JWT, persistência de dados no MongoDB e caching para otimizar buscas. O sistema possibilita que os usuários busquem palavras, armazenem favoritos, visualizem históricos e obtenham respostas rápidas através de uma implementação de cache no MongoDB.
@@ -57,10 +59,6 @@ Uma API desenvolvida em Node.js que permite o gerenciamento de palavras, com fun
      npm start
      ```
 
-   ```
-
-   ```
-
 3. **Configuração do MongoDB**
 
    - Certifique-se de que o MongoDB esteja em execução ou configure um banco de dados na [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
@@ -86,43 +84,7 @@ Uma API desenvolvida em Node.js que permite o gerenciamento de palavras, com fun
      ```bash
      npm start
      ```
-   - O servidor estará rodando na porta `3000` por padrão.
-
-7. **Estrutura de pastas e arquivos**
-
-```bash
-  project/
-├── src/
-│   ├── auth/                  # Módulo de autenticação
-│   │   ├── authController.js
-│   │   ├── authService.js
-│   │   └── authRoutes.js
-│   │
-│   ├── user/                  # Módulo de usuário
-│   │   ├── userController.js
-│   │   ├── userService.js
-│   │   └── userRoutes.js
-│   │
-│   ├── product/               # Módulo de produto
-│   │   ├── productController.js
-│   │   ├── productService.js
-│   │   └── productRoutes.js
-│   │
-│   ├── utils/                 # Módulo de utilidades (funções auxiliares)
-│   │   ├── logger.js
-│   │   └── validator.js
-│   │
-│   └── config/                # Configurações globais
-│       ├── db.js
-│       └── server.js
-│
-├── tests/
-│   ├── auth.test.js
-│   ├── user.test.js
-│   └── product.test.js
-│
-└── package.json
-```
+   - O servidor estará rodando na porta `3000` por padrão ou qual preferir.
 
 ### Documentação com Swagger
 
